@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager
 from config import Config
 from db import get_db_connection
 from routes.auth_routes import auth_bp
+from routes.task_routes import task_bp
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
@@ -12,6 +13,7 @@ CORS(app)
 jwt = JWTManager(app)
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(task_bp)
 
 
 @app.route("/")
