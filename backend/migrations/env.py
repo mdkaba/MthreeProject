@@ -15,10 +15,12 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 config = context.config
 
 # Build DB URL from env vars and inject into alembic config
+db_port = os.getenv('DB_PORT', '3306') # Defaults to 3306 for local dev
+
 db_url = (
     f"mysql+mysqlconnector://"
     f"{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+    f"@{os.getenv('DB_HOST')}:{db_port}/{os.getenv('DB_NAME')}"
 )
 config.set_main_option("sqlalchemy.url", db_url)
 
