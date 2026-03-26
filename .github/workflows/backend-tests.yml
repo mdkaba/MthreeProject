@@ -127,3 +127,6 @@ jobs:
 
       - name: Run tests
         run: pytest tests -v
+
+      - name: Build backend Docker image
+        run: docker compose build backend

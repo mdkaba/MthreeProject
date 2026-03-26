@@ -24,8 +24,8 @@ POST http://127.0.0.1:5000/api/login
 Content-Type: application/json
 
 {
-  "email": "mamadou@test.com",
-  "password": "test123"
+  "email": "admin@test.com",
+  "password": "123456"
 }
 
 ### Get current user
