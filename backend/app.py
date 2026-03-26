@@ -5,6 +5,8 @@ from config import Config
 from db import get_db_connection
 from routes.auth_routes import auth_bp
 from routes.task_routes import task_bp
+from routes.lookup_routes import lookup_bp
+from routes.admin_routes import admin_bp
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
@@ -14,7 +16,8 @@ jwt = JWTManager(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(task_bp)
-
+app.register_blueprint(lookup_bp)
+app.register_blueprint(admin_bp)
 
 @app.route("/")
 def home():

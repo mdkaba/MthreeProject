@@ -278,15 +278,15 @@ def get_task_summary():
 
         cursor.execute(
             """
-            SELECT 
+            SELECT
                 category AS activity,
                 CAST(SUM(hours) AS DECIMAL(10,2)) AS total_hours,
                 COUNT(*) AS count
             FROM tasks
             WHERE user_id = %s
               AND DATE_FORMAT(task_date, '%Y-%m') = %s
-            GROUP BY COALESCE(NULLIF(category, ''), 'Uncategorized')
-            ORDER BY total_hours DESC, activity ASC
+            GROUP BY category
+            ORDER BY SUM(hours) DESC, category ASC
             """,
             (current_user_id, month)
         )
@@ -294,7 +294,7 @@ def get_task_summary():
 
         cursor.execute(
             """
-            SELECT 
+            SELECT
                 CAST(COALESCE(SUM(hours), 0) AS DECIMAL(10,2)) AS total_hours,
                 COUNT(*) AS total_count
             FROM tasks

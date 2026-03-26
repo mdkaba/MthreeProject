@@ -1,0 +1,129 @@
+name: Backend Tests
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-tests.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: time_tracker_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: time_tracker_test
+      JWT_SECRET_KEY: this_is_a_long_secure_jwt_secret_key_for_testing_123456
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create test database schema
+        run: |
+          python -c "
+          import mysql.connector
+          conn = mysql.connector.connect(host='127.0.0.1', user='root', password='root', database='time_tracker_test')
+          cursor = conn.cursor()
+
+          cursor.execute('''
+          CREATE TABLE IF NOT EXISTS regions (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              name VARCHAR(100) NOT NULL UNIQUE
+          )
+          ''')
+
+          cursor.execute('''
+          CREATE TABLE IF NOT EXISTS teams (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              name VARCHAR(150) NOT NULL UNIQUE
+          )
+          ''')
+
+          cursor.execute('''
+          CREATE TABLE IF NOT EXISTS users (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              username VARCHAR(100) NOT NULL UNIQUE,
+              email VARCHAR(150) NOT NULL UNIQUE,
+              password_hash TEXT NOT NULL,
+              role VARCHAR(20) NOT NULL DEFAULT \"user\",
+              region_id INT NULL,
+              team_id INT NULL,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          )
+          ''')
+
+          cursor.execute('''
+          CREATE TABLE IF NOT EXISTS tasks (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              user_id INT NOT NULL,
+              task_name VARCHAR(255) NOT NULL,
+              task_date DATE NOT NULL,
+              category VARCHAR(100) NOT NULL,
+              hours DECIMAL(5,2) NOT NULL,
+              description TEXT,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              CONSTRAINT fk_tasks_user FOREIGN KEY (user_id) REFERENCES users(id)
+          )
+          ''')
+
+          try:
+              cursor.execute('''
+              ALTER TABLE users
+              ADD CONSTRAINT fk_users_region FOREIGN KEY (region_id) REFERENCES regions(id)
+              ''')
+          except Exception:
+              pass
+
+          try:
+              cursor.execute('''
+              ALTER TABLE users
+              ADD CONSTRAINT fk_users_team FOREIGN KEY (team_id) REFERENCES teams(id)
+              ''')
+          except Exception:
+              pass
+
+          cursor.execute(\"INSERT IGNORE INTO regions (id, name) VALUES (1, 'APAC'), (2, 'EMEA'), (3, 'NA'), (4, 'LATAM')\")
+          cursor.execute(\"INSERT IGNORE INTO teams (id, name) VALUES (1, 'Production Support'), (2, 'Application Support'), (3, 'Incident Management'), (4, 'Client Connectivity Support'), (5, 'Other')\")
+
+          conn.commit()
+          cursor.close()
+          conn.close()
+          "
+
+      - name: Run tests
+        run: pytest tests -v

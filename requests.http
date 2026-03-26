@@ -1,0 +1,141 @@
+### Register user
+POST http://127.0.0.1:5000/api/register
+Content-Type: application/json
+
+{
+  "username": "mamadou",
+  "email": "mamadou@test.com",
+  "password": "test123"
+}
+### Register user with team and region
+POST http://127.0.0.1:5000/api/register
+Content-Type: application/json
+
+{
+  "username": "Mazen",
+  "email": "user5@test.com",
+  "password": "123456",
+  "region_id": 1,
+  "team_id": 2
+}
+
+### Login user
+POST http://127.0.0.1:5000/api/login
+Content-Type: application/json
+
+{
+  "email": "mamadou@test.com",
+  "password": "test123"
+}
+
+### Get current user
+GET http://127.0.0.1:5000/api/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4NzAwNSwianRpIjoiMTJjNzhkNjgtM2NlMC00OWJmLWE2NDItNmJiZTJkYWU3NGQ0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODcwMDUsImNzcmYiOiJmMDY2ODRmNC0yODJmLTQ5MGItOTFkYS0xNDQ5YjNlOTU1ZDkiLCJleHAiOjE3NzQ0ODc5MDUsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.dBKkN0rzosg7_VXYCZ2vj5VzKCY9zW-p8UL4D7_m8lo
+
+### Get all users (admin only)
+GET http://127.0.0.1:5000/api/admin/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4NzczOCwianRpIjoiMjNiMTdiNTMtNmRiMS00ZDlkLTlmOTctYTQzNGY4MmZlMWQ2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODc3MzgsImNzcmYiOiI1NWNmMjZmYS0zZjQ1LTQwZWQtOWNmMS1iNDlmYTZkZDRjYTkiLCJleHAiOjE3NzQ0ODg2MzgsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.Csgwdehie9-NEW4pB0eoHKC3cZx8h5rm86jm9_vfQNs
+
+### Update user by admin
+PUT http://127.0.0.1:5000/api/admin/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4ODQ2NSwianRpIjoiN2QyM2I4NjYtOTgxMS00ODczLWI1N2MtNDlmNTM1OTdhYzEzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODg0NjUsImNzcmYiOiI5YTgwOGRlOC1lMzE0LTQ2NDktYjJiMi01MjE4NTQyMjM1ODUiLCJleHAiOjE3NzQ0ODkzNjUsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.yHruXYy3J5T3CdTp8xYRbUTxse_EMTzA6OyjOgB2HuA
+
+{
+  "role": "user",
+  "region_id": 2,
+  "team_id": 3
+}
+
+### Update user team only
+PUT http://127.0.0.1:5000/api/admin/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4ODQ2NSwianRpIjoiN2QyM2I4NjYtOTgxMS00ODczLWI1N2MtNDlmNTM1OTdhYzEzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODg0NjUsImNzcmYiOiI5YTgwOGRlOC1lMzE0LTQ2NDktYjJiMi01MjE4NTQyMjM1ODUiLCJleHAiOjE3NzQ0ODkzNjUsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.yHruXYy3J5T3CdTp8xYRbUTxse_EMTzA6OyjOgB2HuA
+
+{
+  "team_id": 4
+}
+
+### Update user region only
+PUT http://127.0.0.1:5000/api/admin/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4ODQ2NSwianRpIjoiN2QyM2I4NjYtOTgxMS00ODczLWI1N2MtNDlmNTM1OTdhYzEzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODg0NjUsImNzcmYiOiI5YTgwOGRlOC1lMzE0LTQ2NDktYjJiMi01MjE4NTQyMjM1ODUiLCJleHAiOjE3NzQ0ODkzNjUsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.yHruXYy3J5T3CdTp8xYRbUTxse_EMTzA6OyjOgB2HuA
+
+{
+  "region_id": 1
+}
+
+### Invalid role test
+PUT http://127.0.0.1:5000/api/admin/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4ODQ2NSwianRpIjoiN2QyM2I4NjYtOTgxMS00ODczLWI1N2MtNDlmNTM1OTdhYzEzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODg0NjUsImNzcmYiOiI5YTgwOGRlOC1lMzE0LTQ2NDktYjJiMi01MjE4NTQyMjM1ODUiLCJleHAiOjE3NzQ0ODkzNjUsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.yHruXYy3J5T3CdTp8xYRbUTxse_EMTzA6OyjOgB2HuA
+
+{
+  "role": "manager"
+}
+
+### Get all tasks (admin only)
+GET http://127.0.0.1:5000/api/admin/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ4ODk4MywianRpIjoiZjQ0MTM4ZmMtNzVhYy00MzkwLWE0ZWEtMDQ5MmMxYzgxYTkwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0ODg5ODMsImNzcmYiOiJlZjg2MzYxYy0wNTJmLTQxOGUtYWUxMi02NDg4NWI4YThjZDQiLCJleHAiOjE3NzQ0ODk4ODMsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJhZG1pbiJ9.vEWDsL3czjxfP3AiczxJdRoWzgVKR_xkE7lODFmSAlw
+
+### Create task
+POST http://127.0.0.1:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ3MDc4MywianRpIjoiZjVlODYyMzctMDIyNy00MjE2LThjOTktZTZhY2ZiNTdiZWRhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0NzA3ODMsImNzcmYiOiI2ZWZlY2Q4Yy0xZTcxLTQ3N2MtOGNmMy0xZGNhMDVmYmQxZmEiLCJleHAiOjE3NzQ0NzE2ODMsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.CWpFfKJZjWk00w15wUgx0-8Octsz13gruBrYUDb98XI
+
+{
+  "task_name": "Training",
+  "task_date": "2026-09-19",
+  "category": "",
+  "hours": 1.30,
+  "description": "Interview with Mthree"
+}
+
+### Create task WITHOUT category
+POST http://127.0.0.1:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ3MzEwMywianRpIjoiNzA4OTE2NTAtYzdkMi00OTllLThmYmEtZjljM2QyYjI5NjMxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0NzMxMDMsImNzcmYiOiJkMDI3YThhNi05MWYyLTRhNWQtODRhNC0zOWVhYjRhYjNlZGIiLCJleHAiOjE3NzQ0NzQwMDMsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.KdbT-mUFyWmhCr5DV-ophj5kpUOauqOolJYlBuDrO5E
+
+{
+  "task_name": "Test task",
+  "task_date": "2026-04-20",
+  "hours": 1.2,
+  "description": "No category"
+}
+
+### Get all tasks
+GET http://127.0.0.1:5000/api/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ3MjM3NiwianRpIjoiMWE4NWYwZDktMDA1OC00ZWM0LWE5YjAtNzdmODEzOWE4NzYwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0NzIzNzYsImNzcmYiOiI2M2M2YmY4My1mODZhLTQ4NDYtYmJiNi04ZDg3MTg3YjhmNWYiLCJleHAiOjE3NzQ0NzMyNzYsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.bBaxBXyEFExox9VLywK47n7KACWJOmeZ66eo8rYA5q0
+
+### Get tasks for April 2026
+GET http://127.0.0.1:5000/api/tasks?month=2026-04
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ3MjM3NiwianRpIjoiMWE4NWYwZDktMDA1OC00ZWM0LWE5YjAtNzdmODEzOWE4NzYwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0NzIzNzYsImNzcmYiOiI2M2M2YmY4My1mODZhLTQ4NDYtYmJiNi04ZDg3MTg3YjhmNWYiLCJleHAiOjE3NzQ0NzMyNzYsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.bBaxBXyEFExox9VLywK47n7KACWJOmeZ66eo8rYA5q0
+
+### Update task
+PUT http://127.0.0.1:5000/api/tasks/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ2ODk5MSwianRpIjoiZWQyYTQ0ZDItZmE2ZC00YTkwLWI5ZTgtYWI0YjVlMmFiMDBmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0Njg5OTEsImNzcmYiOiJjMmU4ZmM0Ny0xZTI4LTRmNTgtYjdhNy1hZWM4Mzc0MWFkZjQiLCJleHAiOjE3NzQ0Njk4OTEsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.ZnlcKmBRkkSpTj3q0HiTEkWLHiiZ_WZit1v1NHJ8hMI
+
+{
+  "task_name": "Updated Interview",
+  "task_date": "2026-03-27",
+  "category": "Interview",
+  "hours": 1.55,
+  "description": "Updated interview notes"
+}
+
+### Delete task
+DELETE http://127.0.0.1:5000/api/tasks/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ2ODk5MSwianRpIjoiZWQyYTQ0ZDItZmE2ZC00YTkwLWI5ZTgtYWI0YjVlMmFiMDBmIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0Njg5OTEsImNzcmYiOiJjMmU4ZmM0Ny0xZTI4LTRmNTgtYjdhNy1hZWM4Mzc0MWFkZjQiLCJleHAiOjE3NzQ0Njk4OTEsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.ZnlcKmBRkkSpTj3q0HiTEkWLHiiZ_WZit1v1NHJ8hMI
+
+
+### Monthly task summary
+GET http://127.0.0.1:5000/api/tasks/summary?month=2026-04
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NDQ3MTc1MCwianRpIjoiNTZlZjNhMmItMzFiNC00OTNjLWE4OTUtNmQ5YWNmZWJhYzNiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzQ0NzE3NTAsImNzcmYiOiI2Yjg0MWRiZi0zMmUzLTRhNjMtYTNmNy0zYzhlMzU0ZTAyNGUiLCJleHAiOjE3NzQ0NzI2NTAsInVzZXJuYW1lIjoibWFtYWRvdSIsInJvbGUiOiJ1c2VyIn0.pYM1vKbGkNXmiuqW1by7Xi3mGwTg5s0GFkGjAVZcQTM
+
+### Get regions
+GET http://127.0.0.1:5000/api/regions
+
+### Get teams
+GET http://127.0.0.1:5000/api/teams
+

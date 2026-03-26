@@ -19,12 +19,17 @@ def register():
         email = data.get("email", "").strip()
         password = data.get("password", "").strip()
 
+        region_id = data.get("region_id")
+        team_id = data.get("team_id")
+
+        # Basic validation
         if not username or not email or not password:
             return jsonify({"error": "Username, email, and password are required"}), 400
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
+        # Check if user already exists
         cursor.execute(
             "SELECT id FROM users WHERE email = %s OR username = %s",
             (email, username)
@@ -36,17 +41,35 @@ def register():
             conn.close()
             return jsonify({"error": "User already exists"}), 409
 
+        # Validate region_id (if provided)
+        if region_id:
+            cursor.execute("SELECT id FROM regions WHERE id = %s", (region_id,))
+            if not cursor.fetchone():
+                cursor.close()
+                conn.close()
+                return jsonify({"error": "Invalid region_id"}), 400
+
+        # Validate team_id (if provided)
+        if team_id:
+            cursor.execute("SELECT id FROM teams WHERE id = %s", (team_id,))
+            if not cursor.fetchone():
+                cursor.close()
+                conn.close()
+                return jsonify({"error": "Invalid team_id"}), 400
+
+        # Hash password
         password_hash = generate_password_hash(password)
 
+        # Insert user WITH region + team
         cursor.execute(
             """
-            INSERT INTO users (username, email, password_hash)
-            VALUES (%s, %s, %s)
+            INSERT INTO users (username, email, password_hash, role, region_id, team_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
             """,
-            (username, email, password_hash)
+            (username, email, password_hash, "user", region_id, team_id)
         )
-        conn.commit()
 
+        conn.commit()
         new_user_id = cursor.lastrowid
 
         cursor.close()
@@ -57,7 +80,9 @@ def register():
             "user": {
                 "id": new_user_id,
                 "username": username,
-                "email": email
+                "email": email,
+                "region_id": region_id,
+                "team_id": team_id
             }
         }), 201
 
@@ -130,9 +155,20 @@ def get_current_user():
 
         cursor.execute(
             """
-            SELECT id, username, email, role, created_at
-            FROM users
-            WHERE id = %s
+            SELECT 
+                u.id,
+                u.username,
+                u.email,
+                u.role,
+                u.created_at,
+                u.region_id,
+                u.team_id,
+                r.name AS region,
+                t.name AS team
+            FROM users u
+            LEFT JOIN regions r ON u.region_id = r.id
+            LEFT JOIN teams t ON u.team_id = t.id
+            WHERE u.id = %s
             """,
             (current_user_id,)
         )
